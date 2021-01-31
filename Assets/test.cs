@@ -6,9 +6,17 @@ public class test : MonoBehaviour
 {
     // Start is called before the first frame update
     public List<CamionParLigne> myList = new List<CamionParLigne>();
+
+    public float radius = 1;
+    public Vector2 regionSize = Vector2.one;
+    public int rejectionSamples = 30;
+    public float displayRadius = 1;
+    public List<Vector2> points;
+
     void Start()
     {
        mytest(CSVReaderBehaviours.readCSV());
+       points = PoissonDiscSampling.GeneratePoints(radius, regionSize, rejectionSamples);
     }
 
     private void Update()
@@ -26,6 +34,8 @@ public class test : MonoBehaviour
                     Debug.Log(item.CorrectionTerritoriale);
                 }
             }
+
+            
         }
     }
 
@@ -64,6 +74,7 @@ public class test : MonoBehaviour
                 ServiceMarchands = 0;
                 ServiceNonMarchands = 0;
                 CorrectionTerritoriale = 0;
+                Debug.Log("bl");
             }
 
         }
