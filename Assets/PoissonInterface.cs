@@ -21,7 +21,7 @@ public class PoissonInterface : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SpawnCamion(new Vector2(10, 50), gameObject, gameObject.transform.position, radius, testGO, 3);
+        SpawnCamion(new Vector2(10, 50), gameObject, gameObject.transform.position, radius, testGO, 1000);
     }
     public void LoadResources()
     {
@@ -89,6 +89,8 @@ public class PoissonInterface : MonoBehaviour
         
         subholder.transform.SetPositionAndRotation(holderPosition, subholder.transform.rotation);
         subholder.transform.parent = holder.transform;
+        transform.Rotate(Vector3.left, -90);
     }
+    
 
 }
