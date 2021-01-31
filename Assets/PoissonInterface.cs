@@ -21,7 +21,7 @@ public class PoissonInterface : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SpawnCamion(new Vector2(10, 50), gameObject, gameObject.transform.position, radius, testGO, 1000);
+        //SpawnCamion(new Vector2(10, 50), gameObject, gameObject.transform.position, radius, testGO, 1000);
     }
     public void LoadResources()
     {

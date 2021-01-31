@@ -39,6 +39,17 @@ public class test : MonoBehaviour
         }
     }
 
+    public CamionParLigne getCamion(string date)
+    {
+        foreach (CamionParLigne item in myList)
+        {
+            if (item.time == date)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
 
     void mytest(List<CamionParLigne> list)
     {
