@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class CanvasManager : MonoBehaviour
 {
@@ -14,10 +15,32 @@ public class CanvasManager : MonoBehaviour
 
     public TMP_Text date;
 
+    public GameObject objGO;
+
+    private Timer montimer;
+    bool canMove;
+    public AnimationCurve animation;
+
+    public float speed = 2.5f;
+
+    private float val;
+
     private void Start()
     {
         print(getDate());
+        montimer = new Timer(2, UpdateCamion);
     }
+
+    private void Update()
+    {
+        if (canMove)
+        {
+            val += Time.deltaTime;
+            movela();
+        }
+        val = 0;
+    }
+
     public void UpdateCamion()
     {
 
@@ -35,7 +58,7 @@ public class CanvasManager : MonoBehaviour
 
         foreach (var item in Spawner)
         {
-            if(item.gameObject.transform.GetChildCount() > 0)
+            if(item.gameObject.transform.childCount > 0)
             {
                 Destroy(item.gameObject.transform.GetChild(0).gameObject);
             }
@@ -47,12 +70,29 @@ public class CanvasManager : MonoBehaviour
         Spawner[2].SpawnCamion(new Vector2(10, 50), Spawner[2].gameObject, Spawner[2].gameObject.transform.position, Spawner[2].radius, Spawner[2].testGO, (int)(camion.ServiceMarchands * 10));
         Spawner[3].SpawnCamion(new Vector2(10, 50), Spawner[3].gameObject, Spawner[3].gameObject.transform.position, Spawner[3].radius, Spawner[3].testGO, (int)(camion.ServiceNonMarchands * 10));
         Spawner[4].SpawnCamion(new Vector2(10, 50), Spawner[4].gameObject, Spawner[4].gameObject.transform.position, Spawner[4].radius, Spawner[4].testGO, (int)(camion.CorrectionTerritoriale * 10));
+        canMove = false;
+    }
+
+    public void movela()
+    {
+        foreach (var item in Spawner)
+        {
+            for (int i = 0; i < item.gameObject.transform.GetChild(0).childCount; i++)
+            {
+                //item.gameObject.transform.GetChild(0).GetChild(i).transform.DOMoveX(item.gameObject.transform.GetChild(0).GetChild(i).transform.position.x-50, 2f);
+                Vector3 newPos = new Vector3(item.gameObject.transform.GetChild(0).GetChild(i).transform.position.x - 100, item.gameObject.transform.GetChild(0).GetChild(i).transform.position.y, item.gameObject.transform.GetChild(0).GetChild(i).transform.position.z);
+                item.gameObject.transform.GetChild(0).GetChild(i).transform.position = Vector3.Lerp(item.gameObject.transform.GetChild(0).GetChild(i).transform.position, newPos, animation.Evaluate(val*speed));
+                print(animation.Evaluate(Time.deltaTime) * 50);
+            }
+        }
     }
 
     public void Up()
     {
         slide.value++;
-        UpdateCamion();
+        canMove = true;
+        montimer.ResetPlay();
+        //UpdateCamion();
     }
 
     public void Down()
