@@ -35,7 +35,7 @@ public class CanvasManager : MonoBehaviour
 
         foreach (var item in Spawner)
         {
-            if(item.gameObject.transform.GetChildCount() > 0)
+            if(item.gameObject.transform.childCount > 0)
             {
                 Destroy(item.gameObject.transform.GetChild(0).gameObject);
             }
