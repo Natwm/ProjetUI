@@ -85,7 +85,7 @@ public class test : MonoBehaviour
                 ServiceMarchands = 0;
                 ServiceNonMarchands = 0;
                 CorrectionTerritoriale = 0;
-                Debug.Log("bl");
+
             }
 
         }

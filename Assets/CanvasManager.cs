@@ -13,9 +13,10 @@ public class CanvasManager : MonoBehaviour
 
     public CamionParLigne camion;
 
-    public TMP_Text date;
+    public TMP_Text dateSlider;
+    public TMP_Text dateWorld;
 
-    public GameObject objGO;
+    //public GameObject objGO;
 
     private Timer montimer;
     bool canMove;
@@ -25,9 +26,18 @@ public class CanvasManager : MonoBehaviour
 
     private float val;
 
+    [Space]
+    [Header("text")]
+    public TMP_Text ProduitsAgricoltes;
+    public TMP_Text Industrie;
+    public TMP_Text ServiceMarchands;
+    public TMP_Text ServiceNonMarchands;
+    public TMP_Text CorrectionTerritoriale;
+
+
     private void Start()
     {
-        print(getDate());
+        
         montimer = new Timer(2, UpdateCamion);
     }
 
@@ -43,8 +53,7 @@ public class CanvasManager : MonoBehaviour
 
     public void UpdateCamion()
     {
-
-        getDate();
+        //getDate();
         foreach (PoissonInterface item in Spawner)
         {
             camion = obj.getCamion(getDate());
@@ -58,19 +67,27 @@ public class CanvasManager : MonoBehaviour
 
         foreach (var item in Spawner)
         {
-            if(item.gameObject.transform.childCount > 0)
+            if (item.gameObject.transform.childCount > 0)
             {
                 Destroy(item.gameObject.transform.GetChild(0).gameObject);
             }
-            
+
         }
 
-        Spawner[0].SpawnCamion(new Vector2(10, 50), Spawner[0].gameObject, Spawner[0].gameObject.transform.position, Spawner[0].radius, Spawner[0].testGO, (int)(camion.ProduitsAgricoltes*10));
-        Spawner[1].SpawnCamion(new Vector2(10, 50), Spawner[1].gameObject, Spawner[1].gameObject.transform.position, Spawner[1].radius, Spawner[1].testGO, (int)(camion.Industrie * 10));
-        Spawner[2].SpawnCamion(new Vector2(10, 50), Spawner[2].gameObject, Spawner[2].gameObject.transform.position, Spawner[2].radius, Spawner[2].testGO, (int)(camion.ServiceMarchands * 10));
-        Spawner[3].SpawnCamion(new Vector2(10, 50), Spawner[3].gameObject, Spawner[3].gameObject.transform.position, Spawner[3].radius, Spawner[3].testGO, (int)(camion.ServiceNonMarchands * 10));
-        Spawner[4].SpawnCamion(new Vector2(10, 50), Spawner[4].gameObject, Spawner[4].gameObject.transform.position, Spawner[4].radius, Spawner[4].testGO, (int)(camion.CorrectionTerritoriale * 10));
+        Spawner[0].SpawnCamion(new Vector2(30, 60), Spawner[0].gameObject, Spawner[0].gameObject.transform.position, Spawner[0].radius, Spawner[0].testGO, (int)(camion.ProduitsAgricoltes * 10));
+        Spawner[1].SpawnCamion(new Vector2(30, 60), Spawner[1].gameObject, Spawner[1].gameObject.transform.position, Spawner[1].radius, Spawner[1].testGO, (int)(camion.Industrie * 10));
+        Spawner[2].SpawnCamion(new Vector2(30, 60), Spawner[2].gameObject, Spawner[2].gameObject.transform.position, Spawner[2].radius, Spawner[2].testGO, (int)(camion.ServiceMarchands * 10));
+        Spawner[3].SpawnCamion(new Vector2(30, 60), Spawner[3].gameObject, Spawner[3].gameObject.transform.position, Spawner[3].radius, Spawner[3].testGO, (int)(camion.ServiceNonMarchands * 10));
+        Spawner[4].SpawnCamion(new Vector2(30, 60), Spawner[4].gameObject, Spawner[4].gameObject.transform.position, Spawner[4].radius, Spawner[4].testGO, (int)(camion.CorrectionTerritoriale * 10));
         canMove = false;
+
+
+        ProduitsAgricoltes.text = (camion.ProduitsAgricoltes *10).ToString();
+        Industrie.text = (camion.Industrie*10).ToString();
+        ServiceMarchands.text = (camion.ServiceMarchands*10).ToString();
+        ServiceNonMarchands.text = (camion.ServiceNonMarchands*10).ToString();
+        CorrectionTerritoriale.text = (camion.CorrectionTerritoriale*10).ToString();
+
     }
 
     public void movela()
@@ -81,7 +98,7 @@ public class CanvasManager : MonoBehaviour
             {
                 //item.gameObject.transform.GetChild(0).GetChild(i).transform.DOMoveX(item.gameObject.transform.GetChild(0).GetChild(i).transform.position.x-50, 2f);
                 Vector3 newPos = new Vector3(item.gameObject.transform.GetChild(0).GetChild(i).transform.position.x - 100, item.gameObject.transform.GetChild(0).GetChild(i).transform.position.y, item.gameObject.transform.GetChild(0).GetChild(i).transform.position.z);
-                item.gameObject.transform.GetChild(0).GetChild(i).transform.position = Vector3.Lerp(item.gameObject.transform.GetChild(0).GetChild(i).transform.position, newPos, animation.Evaluate(val*speed));
+                item.gameObject.transform.GetChild(0).GetChild(i).transform.position = Vector3.Lerp(item.gameObject.transform.GetChild(0).GetChild(i).transform.position, newPos, animation.Evaluate(val * speed));
                 print(animation.Evaluate(Time.deltaTime) * 50);
             }
         }
@@ -92,28 +109,38 @@ public class CanvasManager : MonoBehaviour
         slide.value++;
         canMove = true;
         montimer.ResetPlay();
-        //UpdateCamion();
+        UpdateDateWorld();
+        UpdateSlider();
+        UpdateCamion();
     }
 
     public void Down()
     {
         slide.value--;
         UpdateCamion();
+        UpdateDateWorld();
+        UpdateSlider();
+    }
+
+    public void OK()
+    {
+        UpdateDateWorld();
+        UpdateSlider();
     }
 
     public void UpdateSlider()
     {
-        getDate();
+        dateSlider.text = getDate();
     }
 
-    void UpdateDate(string newdate)
+    void UpdateDateWorld()
     {
-        date.text = newdate;
+        dateWorld.text = getDate();
     }
 
     public string getDate()
     {
-        UpdateDate((slide.value + 1950).ToString());
+        //UpdateDate((slide.value + 1950).ToString());
         return (slide.value + 1950).ToString();
     }
 
